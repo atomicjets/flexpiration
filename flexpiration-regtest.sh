@@ -2,15 +2,16 @@
 # usage: ./flexpiration-regtest.sh
 
 # set these variables for your environment's specific configuration
-REGTEST_DIR=/tmp/bitcoin-flexpiration-regtest;
+REGTEST_DIR="/tmp/bitcoin-flexpiration-regtest";
 BITCOIN_QT=~/Desktop/bitcoin/src/qt/bitcoin-qt;
 BITCOIN_CLI=~/Desktop/bitcoin/src/bitcoin-cli;
 NODEJS=/opt/node-v0.12.5-linux-x64/bin/node;
 
 # setup a fresh regtest environment for this test
-/bin/mkdir -p $REGTEST_DIR;
+#/bin/rm -rf "$REGTEST_DIR";
+/bin/mkdir -p "$REGTEST_DIR";
 # need this mainly for the rpcpassword
-/bin/cp ~/.bitcoin/bitcoin.conf $REGTEST_DIR;
+/bin/cp ~/.bitcoin/bitcoin.conf "$REGTEST_DIR";
 
 # configure the new regtest environment
 $BITCOIN_QT -regtest -txindex -server -datadir=$REGTEST_DIR &
@@ -37,15 +38,17 @@ ACCEPT_TRAN=$(/bin/echo $RESULT | /usr/bin/env python3 -c 'import json, sys, dec
 BOGUS_ACCEPT_TRAN=$(/bin/echo $RESULT | /usr/bin/env python3 -c 'import json, sys, decimal; data=json.load(sys.stdin); print(data["bogusAcceptTransaction"]["raw"]);');
 HASSLE_TRAN=$(/bin/echo $RESULT | /usr/bin/env python3 -c 'import json, sys, decimal; data=json.load(sys.stdin); print(data["hassleTransaction"]["raw"]);');
 
-$BITCOIN_CLI -regtest -datadir=$REGTEST_DIR sendrawtransaction "$EARNEST_MONEY_TRAN";
 $BITCOIN_CLI -regtest -datadir=$REGTEST_DIR getblockcount;
+# should work
+$BITCOIN_CLI -regtest -datadir=$REGTEST_DIR sendrawtransaction "$EARNEST_MONEY_TRAN";
 # should fail because it tries to send the earnest money to a non-escrow address
 $BITCOIN_CLI -regtest -datadir=$REGTEST_DIR sendrawtransaction "$BOGUS_ACCEPT_TRAN";
+# simulate waiting until cltv expiration is possible
 $BITCOIN_CLI -regtest -datadir=$REGTEST_DIR generate 48 > /dev/null 2>&1;
 $BITCOIN_CLI -regtest -datadir=$REGTEST_DIR getblockcount;
 # should fail because it tries to use an invalidly signed transaction
 $BITCOIN_CLI -regtest -datadir=$REGTEST_DIR sendrawtransaction "$HASSLE_TRAN";
-# should work
+# should work because the offer was not withdrawn
 $BITCOIN_CLI -regtest -datadir=$REGTEST_DIR sendrawtransaction "$ACCEPT_TRAN";
 $BITCOIN_CLI -regtest -datadir=$REGTEST_DIR generate 1 > /dev/null 2>&1;
 

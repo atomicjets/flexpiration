@@ -27,8 +27,9 @@ as the Earnest Money output, will be created and confirmed into the Bitcoin
 blockchain. The Earnest Money output can be spent to the Escrow Address by
 Seller to demonstrate acceptance of this offer. The redeem script of said P2SH
 CLTV output will be included with this offer to the Seller. A signature that
-signs a transaction spending the Earnest Money output to the escrow address with
-the Buyer's Public Key will also be provided in tandem with this offer.
+signs a transaction spending the Earnest Money output to the escrow address and
+that can be verified with the Buyer's Public Key will also be provided in tandem
+with this offer.
 
 Buyer:
 Buyer's Public Key: <buyer pubkey>

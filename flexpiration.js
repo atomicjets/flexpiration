@@ -8,6 +8,8 @@
 // to Alice making the offer to Bob.
 // This script assumes that it is being used in conjunction with a fresh regtest
 // environment that was setup with the accompanying flexpiration-regtest.sh script.
+// There are also a couple of transactions created at the end of this script
+// that can be used to show non-viability of certain undesirable actions.
 
 'use strict';
 
@@ -73,6 +75,8 @@ var earnestMoneyTransaction = new bitcore.Transaction().from({
 // 2) The transaction id + vout of the Earnest Money P2SH CLTV output
 // 3) The redeem script of the Earnest Money output
 // 4) Alice's signature spending the Earnest Money output to the escrow address
+// In actuality, Alice might send Bob the whole partially signed transaction.
+// Then all Bob has to do to accept is sign it and broadcast it.
 
 var acceptTransaction = new bitcore.Transaction().from({
   txid: earnestMoneyTransaction.id,
