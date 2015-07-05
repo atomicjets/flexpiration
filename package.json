@@ -1,0 +1,24 @@
+{
+  "name": "flexpiration",
+  "version": "1.0.0",
+  "description": "Demonstrate \"Flexible Expiration Offer and Acceptance with Escrow\" Smart Contract.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "CLTV",
+    "CHECKLOCKTIMEVERIFY",
+    "OP_CHECKLOCKTIMEVERIFY",
+    "BIP65",
+    "BIP0065",
+    "BIP-65",
+    "BIP-0065",
+    "BIP"
+  ],
+  "author": "Michael Ruddy",
+  "license": "MIT",
+  "dependencies": {
+    "argparse": "^1.0.2",
+    "bitcore": "^0.12.11"
+  }
+}
